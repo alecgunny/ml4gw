@@ -332,11 +332,11 @@ def compute_ifo_snr(
     """
 
     # compute frequency power in units of Hz^-1
-    fft = torch.fft.rfft(responses, axis=-1) / sample_rate
+    fft = torch.fft.rfft(responses, axis=-1).type(torch.complex128)
 
     # multiply with complex conjugate to get magnitude**2
     # then divide by the background to bring units back to Hz^-1
-    fft_abs = fft.abs()
+    fft_abs = fft.abs() / sample_rate
     integrand = fft_abs / (backgrounds ** 0.5)
     integrand = integrand.type(torch.float32) ** 2
 
